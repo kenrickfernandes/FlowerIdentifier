@@ -514,23 +514,34 @@ public class MainActivity extends AppCompatActivity {
                                     DecimalFormat form = new DecimalFormat("0.00");
                                     float[][] op = result.getOutput(0);
                                     Map<String, Float> o = new HashMap<>();
+                                    float max = 0;
+                                    String label = "";
+
 //                                    resultView.setText(op.length + "  : " + op.toString());
                                     for(int i = 0; i < op[0].length; i++){
-                                        final String label;
                                         try {
-                                            if (!form.format(op[0][i]).equals("0.00")) {
+                                            if (Float.parseFloat(form.format(op[0][i])) >= max ){
+                                                max = Float.parseFloat(form.format(op[0][i]));
                                                 label = ImageUtils.getLabel(getAssets().open("labels.json"), i);
-                                                final String resu = label + ": " + form.format(op[0][i]) + "\n";
 
-                                                o.put(label, op[0][1]);
-
-                                                resultView.append(resu);
-                                                progressBar.dismiss();
+//                                                final String resu = label + ": " + form.format(op[0][i]) + "\n";
+//
+//                                                o.put(label, op[0][1]);
+//
+//                                                resultView.append(resu);
+//                                                progressBar.dismiss();
                                             }
                                             } catch(IOException e){
                                                 e.printStackTrace();
                                             }
-                                        }
+                                    }
+                                    if(max <= 0.6){
+                                        resultView.setText("Flower not found!\nChoose a valid image.");
+                                    }
+                                    else{
+                                        resultView.setText(label);
+                                    }
+                                    progressBar.dismiss();
 
                                 }
                             })
